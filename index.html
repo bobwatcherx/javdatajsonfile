@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Movie List</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <style type="text/css">
+     .card-img-top {
+  max-width: 100%;
+}
+   </style>
+  </head>
+  <body>
+
+   <nav class="navbar navbar-expand-lg navbar-light bg-primary navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><h3>JavSmoke</h3></a>
+
+
+  </div>
+</nav>
+
+
+
+
+    <div class="container" style="padding: 10px">
+      <h3 class="mb-4">New JAV Videos</h3>
+      <div class="row" id="movie-list"></div>          
+      </div>
+    </div>
+
+    <script>
+      // Get the HTML element that will display the API data
+      const movieList = document.querySelector('#movie-list');
+      // Get the value of the "page" parameter from the URL, default to 1
+const mypage = (new URLSearchParams(window.location.search)).get('page') || 1;
+
+      // Call the API using fetch
+      fetch(`https://api.streamsb.com/api/file/list?page=${mypage}&key=60136bvveeu068hvw4dcu`)
+        .then(response => response.json()) // Convert the response to JSON
+        .then(data => {
+          const divButtonPage = document.getElementById('buttonpage');
+    const totalFiles = data.result.files.length;
+
+    const perPage = 20;
+    const totalPages = Math.ceil(totalFiles / perPage);
+    
+          // console.log(typeof data); // Check the data type
+          // console.log(data.result.files); // Log the data to inspect its contents
+           const reversedData = data.result.files.reverse();
+
+          // Loop through the data and create an HTML element for each movie
+          reversedData.forEach(movie => {
+            const movieElement = document.createElement('div');
+            movieElement.classList.add('col-md-3', 'mb-4', 'col-sm-6'); // Add Bootstrap classes for column width and margin bottom, and column width for mobile
+           movieElement.innerHTML = `
+            <div class="card shadow">
+              <img src="${movie.thumbnail.replace('_t.jpg', '.jpg')}" class="card-img-top w-100" alt="${movie.title}" style="background-size:cover">
+              <div class="card-body">
+                <a href="details.html?views=${movie.views}&file_code=${movie.file_code}&uploaded=${movie.uploaded}&link=${movie.link}" style="text-decoration:none;">
+                  <span style="font-size:15px;font-weight:bold">
+                    ${movie.title}
+                  </span>
+                </a>
+                <br/>
+                <span style="font-size:12px;font-weight:bold">
+                  Views: ${movie.views}
+                </span>
+              </div>
+            </div>
+          `;
+
+            movieList.appendChild(movieElement); // Add the movie element to the HTML element
+          });
+        })
+        .catch(error => console.error(error)); // Handle any errors
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
